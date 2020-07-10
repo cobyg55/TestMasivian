@@ -42,9 +42,8 @@ public class RouletteController {
     public ResponseEntity<Object> open(@PathVariable(value = "id") Long id) throws RouletteNotFoundException {
         Optional<Roulette> ruleta = Optional.ofNullable(rouletteService.findById(id).orElseThrow(() -> new RouletteNotFoundException(String.format(ROULETTE_DOES_NOT_EXIST_MESSAGE, id))));
         if (ruleta.isPresent()) {
-            if (!ruleta.get().isStatus()) {
-                ruleta.get().setStatus(true);
-                rouletteService.update(ruleta.get());
+            if (!ruleta.get().isOpen()) {
+                rouletteService.open(ruleta.get());
             }
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -55,7 +54,7 @@ public class RouletteController {
     public ResponseEntity<Bet> makeBet(@RequestHeader(value = "user-id") String userId, @PathVariable(value = "id") Long id, @Valid @RequestBody Bet bet) throws RouletteNotFoundException, RouletteClosedException {
         Optional<Roulette> ruleta = Optional.ofNullable(rouletteService.findById(id).orElseThrow(() -> new RouletteNotFoundException(String.format(ROULETTE_DOES_NOT_EXIST_MESSAGE, id))));
         if (ruleta.isPresent()) {
-            if (ruleta.get().isStatus()) {
+            if (ruleta.get().isOpen()) {
                 Bet newBet = betService.create(bet);
                 ruleta.get().getBets().add(newBet);
                 rouletteService.update(ruleta.get());
@@ -71,9 +70,8 @@ public class RouletteController {
     public ResponseEntity<List<Bet>> close(@PathVariable(value = "id") Long id) throws RouletteNotFoundException {
         Optional<Roulette> ruleta = Optional.ofNullable(rouletteService.findById(id).orElseThrow(() -> new RouletteNotFoundException(String.format(ROULETTE_DOES_NOT_EXIST_MESSAGE, id))));
         if (ruleta.isPresent()) {
-            if (ruleta.get().isStatus()) {
-                ruleta.get().setStatus(false);
-                rouletteService.update(ruleta.get());
+            if (ruleta.get().isOpen()) {
+                rouletteService.close(ruleta.get());
             }
             return new ResponseEntity<>(ruleta.get().getBets(), HttpStatus.OK);
         }

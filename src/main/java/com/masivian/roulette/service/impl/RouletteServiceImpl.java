@@ -35,5 +35,15 @@ public class RouletteServiceImpl implements RouletteService {
         return rouletteRepository.save(roulette);
     }
 
+    @Override
+    public Roulette open(Roulette roulette) {
+        roulette.setOpen(true);
+        return rouletteRepository.save(roulette);
+    }
 
+    @Override
+    public Roulette close(Roulette roulette) {
+        roulette.setOpen(false);
+        return rouletteRepository.save(roulette);
+    }
 }

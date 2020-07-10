@@ -10,4 +10,6 @@ public interface RouletteService {
     Optional<Roulette> findById(Long id);
     Roulette create(Roulette roulette);
     Roulette update(Roulette roulette);
+    Roulette open(Roulette roulette);
+    Roulette close(Roulette roulette);
 }

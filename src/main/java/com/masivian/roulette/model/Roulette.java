@@ -15,7 +15,7 @@ public class Roulette {
 
     @Id
     private Long id;
-    private boolean status;
+    private boolean open;
 
     @JsonIgnore
     private List<Bet> bets = new ArrayList<>();;
